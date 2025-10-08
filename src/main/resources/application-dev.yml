@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: ecommerce-demo-api
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecommerce_db
+    username: ecommerce
+    password: ecommerce
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  data:
+    elasticsearch:
+      client:
+        type: rest
+      cluster-name: elasticsearch
+      repositories:
+        enabled: true
+      uris: http://localhost:9200   # ✅ acessa o container via porta mapeada
+      connection-timeout: 5s
+      socket-timeout: 10s
+
+  kafka:
+    bootstrap-servers: localhost:9093   # ✅ usa porta mapeada do container
+    consumer:
+      group-id: ecommerce-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  flyway:
+    enabled: true
+    url: jdbc:mysql://localhost:3306/ecommerce_db
+    user: ecommerce
+    password: ecommerce
+    locations: classpath:db/migration
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET:super-secure-secret-key-for-jwt-256-bit-size}

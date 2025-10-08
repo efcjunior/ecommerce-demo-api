@@ -1,0 +1,112 @@
+version: "3.8"
+
+networks:
+  ecommerce-net:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ecommerce-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ecommerce_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: ecommerce
+      MYSQL_PASSWORD: ecommerce
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ecommerce-net
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.3
+    container_name: ecommerce-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - http.cors.enabled=true
+      - http.cors.allow-origin="*"
+      - http.cors.allow-headers=Content-Type,Authorization
+      - http.cors.allow-credentials=true
+      - action.auto_create_index=true
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - ecommerce-net
+
+  elasticsearch-head:
+    image: mobz/elasticsearch-head:5
+    container_name: ecommerce-es-head
+    environment:
+      - NODE_OPTIONS=--openssl-legacy-provider
+    ports:
+      - "9100:9100"
+    depends_on:
+      - elasticsearch
+    networks:
+      - ecommerce-net
+
+  zookeeper:
+    image: bitnamilegacy/zookeeper:3.8.4
+    container_name: ecommerce-zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+    networks:
+      - ecommerce-net
+
+  kafka:
+    image: bitnamilegacy/kafka:3.8.0
+    container_name: ecommerce-kafka
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+    ports:
+      - "9092:9092"   # interno (para containers)
+      - "9093:9093"   # externo (para apps locais)
+    depends_on:
+      - zookeeper
+    networks:
+      - ecommerce-net
+
+
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: ecommerce-kafka-ui
+    ports:
+      - "8085:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    depends_on:
+      - kafka
+    networks:
+      - ecommerce-net
+
+  adminer:
+    image: adminer:latest
+    container_name: ecommerce-adminer
+    restart: always
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql
+    networks:
+      - ecommerce-net
+
+volumes:
+  mysql_data:
+  es_data:
+  pgadmin_data:
