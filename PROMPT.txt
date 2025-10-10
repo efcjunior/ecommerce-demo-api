@@ -181,3 +181,45 @@ InvalidTotalSpentException → total gasto inválido
 ------------------------------------------------------------
 Cole este prompt em um novo chat e diga:
 "Continuar a partir deste contexto de reestruturação da Clean Architecture com exceções de domínio e testes TDD dos domínios Product e Order."
+
+
+
+
+ecommerce-usecases
+└── src/main/java/demo/ecommerce/usecases
+    ├── common
+    │   ├── UseCase.java                 // interface genérica UseCase<I,O>
+    │   ├── Command.java / Query.java    // marcadores opcionais p/ CQRS
+    │   ├── VoidUseCase.java             // útil para casos sem retorno
+    │   └── exceptions
+    │       └── NotFoundException.java   // exceção de aplicação (não-domínio)
+    ├── ports
+    │   ├── ProductRepository.java       // portas (interfaces) de saída
+    │   ├── ClockProvider.java
+    │   ├── IdGenerator.java
+    │   └── EventPublisher.java          // opcional (domínio→aplicação)
+    └── product
+        ├── command
+        │   ├── CreateProduct
+        │   │   ├── CreateProductInput.java
+        │   │   ├── CreateProductOutput.java
+        │   │   └── CreateProductInteractor.java
+        │   ├── UpdateProduct
+        │   │   ├── UpdateProductInput.java
+        │   │   ├── UpdateProductOutput.java
+        │   │   └── UpdateProductInteractor.java
+        │   ├── DeleteProduct
+        │   │   ├── DeleteProductInput.java
+        │   │   └── DeleteProductInteractor.java
+        │   └── AdjustProductStock
+        │       ├── AdjustProductStockInput.java   // {productId, delta}
+        │       └── AdjustProductStockInteractor.java
+        └── query
+            ├── GetProductById
+            │   ├── GetProductByIdInput.java
+            │   ├── GetProductByIdOutput.java
+            │   └── GetProductByIdInteractor.java
+            └── SearchProducts
+                ├── SearchProductsInput.java
+                ├── SearchProductsOutput.java
+                └── SearchProductsInteractor.java
