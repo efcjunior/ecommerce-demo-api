@@ -2,6 +2,7 @@ package demo.ecommerce.entities.product;
 
 import demo.ecommerce.entities.exceptions.InsufficientStockException;
 import demo.ecommerce.entities.exceptions.ValidationException;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -80,6 +81,7 @@ class ProductTest {
         );
     }
 
+    @SneakyThrows
     @Test
     void shouldUpdateProductWhenValidData() {
         Product product = Product.create(
@@ -91,6 +93,8 @@ class ProductTest {
         );
 
         LocalDateTime oldUpdatedAt = product.getUpdatedAt();
+
+        Thread.sleep(1);
 
         product.update(
                 "Gaming Laptop Pro",
@@ -133,6 +137,7 @@ class ProductTest {
         );
     }
 
+    @SneakyThrows
     @Test
     void shouldDecreaseStockWhenQuantityValid() {
         Product product = Product.create(
@@ -144,6 +149,8 @@ class ProductTest {
         );
 
         LocalDateTime oldUpdatedAt = product.getUpdatedAt();
+
+        Thread.sleep(1);
 
         product.decreaseStock(3);
 
@@ -182,6 +189,7 @@ class ProductTest {
         );
     }
 
+    @SneakyThrows
     @Test
     void shouldIncreaseStockWhenQuantityValid() {
         Product product = Product.create(
@@ -193,6 +201,8 @@ class ProductTest {
         );
 
         LocalDateTime oldUpdatedAt = product.getUpdatedAt();
+
+        Thread.sleep(1);
 
         product.increaseStock(3);
 

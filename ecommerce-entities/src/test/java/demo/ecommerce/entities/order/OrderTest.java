@@ -3,9 +3,13 @@ package demo.ecommerce.entities.order;
 import demo.ecommerce.entities.exceptions.EmptyOrderException;
 import demo.ecommerce.entities.exceptions.InvalidOrderStateException;
 import demo.ecommerce.entities.exceptions.InvalidOrderTotalException;
+import demo.ecommerce.entities.exceptions.InvalidPriceException;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,6 +64,42 @@ class OrderTest {
 
         assertEquals(OrderStatus.PAID, order.getStatus());
     }
+
+    @Test
+    void shouldThrowExceptionWhenItemPriceIsNegative() {
+        assertThrows(InvalidPriceException.class, () ->
+                new OrderItem(UUID.randomUUID(), 1, new BigDecimal("-10.00"), 100)
+        );
+    }
+
+
+    @Test
+    void shouldThrowExceptionWhenTotalAmountIsNegativeUsingReflection() throws Exception {
+        UUID orderId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        List<OrderItem> items = List.of();
+
+        Constructor<Order> constructor = Order.class.getDeclaredConstructor(
+                UUID.class, UUID.class, List.class, BigDecimal.class, OrderStatus.class, LocalDateTime.class
+        );
+        constructor.setAccessible(true);
+
+        try {
+            constructor.newInstance(
+                    orderId,
+                    userId,
+                    items,
+                    new BigDecimal("-100.00"),
+                    OrderStatus.PENDING,
+                    LocalDateTime.now()
+            );
+            fail("Expected InvalidOrderTotalException to be thrown");
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            assertInstanceOf(InvalidOrderTotalException.class, cause, "Expected InvalidOrderTotalException, but got: " + cause.getClass().getSimpleName());
+        }
+    }
+
 
     @Test
     void shouldThrowExceptionWhenPayingNonPendingOrder() {
@@ -134,17 +174,6 @@ class OrderTest {
 
         assertEquals(0, order.getTotalAmount().compareTo(new BigDecimal("200.00"))); // 100 + (50*2)
         assertTrue(order.getTotalAmount().compareTo(initialTotal) > 0);
-    }
-
-    @Test
-    void shouldThrowExceptionWhenTotalAmountIsNegative() {
-        UUID userId = UUID.randomUUID();
-
-        OrderItem invalidItem = new OrderItem(UUID.randomUUID(), 1, new BigDecimal("-10.00"), 100);
-
-        assertThrows(InvalidOrderTotalException.class, () ->
-                Order.create(userId, List.of(invalidItem))
-        );
     }
 
     @Test
