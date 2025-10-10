@@ -25,7 +25,7 @@ frameworks-drivers → interface-adapters → usecases → entities
 - Exceções genéricas substituídas por exceções específicas de domínio.
 - Regras de validação e consistência encapsuladas dentro das entidades.
 - Padrão de exceções centralizado na classe base DomainException.
-- Testes unitários do domínio Product implementados via TDD com JUnit 5.
+- Testes unitários dos domínios Product e Order implementados via TDD com JUnit 5.
 
 ------------------------------------------------------------
 🧱 ENTIDADES REESTRUTURADAS
@@ -80,6 +80,29 @@ Casos cobertos:
 Resultado: cobertura completa das regras de negócio do domínio Product.
 
 ------------------------------------------------------------
+🧪 TESTES DE DOMÍNIO — ORDER (TDD)
+------------------------------------------------------------
+Classe: OrderTest
+Framework: JUnit 5
+Pacote: demo.ecommerce.entities.order
+
+Casos cobertos:
+1. shouldCreateOrderWithValidItems
+2. shouldThrowExceptionWhenCreatingWithEmptyItems
+3. shouldCreateOrderWithCanceledStatusWhenAnyItemOutOfStock
+4. shouldPayOrderWhenStatusIsPending
+5. shouldThrowExceptionWhenPayingNonPendingOrder
+6. shouldCancelOrderWhenPending
+7. shouldThrowExceptionWhenCancelingPaidOrder
+8. shouldAddItemWhenOrderIsPending
+9. shouldThrowExceptionWhenAddingItemToNonPendingOrder
+10. shouldRecalculateTotalWhenItemsAdded
+11. shouldThrowExceptionWhenTotalAmountIsNegative
+12. shouldPreserveIdUserIdAndCreatedAt
+
+Resultado: cobertura completa das regras de negócio e transições de estado do domínio Order.
+
+------------------------------------------------------------
 💥 EXCEÇÕES DE DOMÍNIO
 ------------------------------------------------------------
 DomainException (base) → raiz para todas as exceções do domínio
@@ -96,7 +119,7 @@ InvalidTotalSpentException → total gasto inválido
 ------------------------------------------------------------
 🎯 PRÓXIMOS PASSOS SUGERIDOS
 ------------------------------------------------------------
-1. Replicar abordagem TDD nas entidades Order, OrderItem e User.
+1. Replicar abordagem TDD nas entidades OrderItem e User.
 2. Integrar camada de persistência (MySQL) e indexação (Elasticsearch).
 3. Validar consistência de eventos Kafka após pagamento de pedidos.
 4. Garantir cobertura de testes mínima de 80% no módulo ecommerce-entities.
@@ -111,4 +134,4 @@ InvalidTotalSpentException → total gasto inválido
 📌 COMO CONTINUAR
 ------------------------------------------------------------
 Cole este prompt em um novo chat e diga:
-"Continuar a partir deste contexto de reestruturação da Clean Architecture com exceções de domínio e testes TDD do Product."
+"Continuar a partir deste contexto de reestruturação da Clean Architecture com exceções de domínio e testes TDD dos domínios Product e Order."
