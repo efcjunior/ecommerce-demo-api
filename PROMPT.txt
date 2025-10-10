@@ -25,7 +25,7 @@ frameworks-drivers → interface-adapters → usecases → entities
 - Exceções genéricas substituídas por exceções específicas de domínio.
 - Regras de validação e consistência encapsuladas dentro das entidades.
 - Padrão de exceções centralizado na classe base DomainException.
-- Testes unitários dos domínios Product, Order e User implementados via TDD com JUnit 5.
+- Testes unitários dos domínios Product, Order, User, UserAverageTicket e UserPurchaseSummary implementados via TDD com JUnit 5.
 
 ------------------------------------------------------------
 🧱 ENTIDADES REESTRUTURADAS
@@ -126,7 +126,6 @@ Casos cobertos:
 
 Resultado: cobertura completa das regras de negócio e validações do domínio User.
 
-
 ------------------------------------------------------------
 🧪 TESTES DE DOMÍNIO — USER AVERAGE TICKET (TDD)
 ------------------------------------------------------------
@@ -141,6 +140,21 @@ Casos cobertos:
 5. shouldThrowExceptionWhenAverageTicketIsNegative
 
 Resultado: validação completa das regras de negócio do record UserAverageTicket.
+
+------------------------------------------------------------
+🧪 TESTES DE DOMÍNIO — USER PURCHASE SUMMARY (TDD)
+------------------------------------------------------------
+Classe: UserPurchaseSummaryTest
+Pacote: demo.ecommerce.entities.user
+
+Casos cobertos:
+1. shouldCreateWhenTotalSpentIsPositive
+2. shouldCreateWhenTotalSpentIsZero
+3. shouldAcceptPositiveValuesWithDifferentScales
+4. shouldThrowExceptionWhenTotalSpentIsNull
+5. shouldThrowExceptionWhenTotalSpentIsNegative
+
+Resultado: validação completa das regras de negócio do record UserPurchaseSummary.
 
 ------------------------------------------------------------
 💥 EXCEÇÕES DE DOMÍNIO
