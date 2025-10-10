@@ -2,7 +2,7 @@
 
 Objetivo:
 Reestruturar o projeto ecommerce-demo-api seguindo a Clean Architecture (Uncle Bob),
-com foco em separação de camadas, modularização Maven, entidades ricas e exceções de domínio.
+com foco em separação de camadas, modularização Maven, entidades ricas, exceções de domínio e testes de unidade via TDD.
 
 ------------------------------------------------------------
 🏗 ESTRUTURA DE MÓDULOS
@@ -25,6 +25,7 @@ frameworks-drivers → interface-adapters → usecases → entities
 - Exceções genéricas substituídas por exceções específicas de domínio.
 - Regras de validação e consistência encapsuladas dentro das entidades.
 - Padrão de exceções centralizado na classe base DomainException.
+- Testes unitários do domínio Product implementados via TDD com JUnit 5.
 
 ------------------------------------------------------------
 🧱 ENTIDADES REESTRUTURADAS
@@ -55,6 +56,30 @@ Relatórios
 - Ambos definidos como records imutáveis e validados
 
 ------------------------------------------------------------
+🧪 TESTES DE DOMÍNIO — PRODUCT (TDD)
+------------------------------------------------------------
+Classe: ProductTest
+Framework: JUnit 5
+Pacote: demo.ecommerce.entities.product
+
+Casos cobertos:
+1. shouldCreateProductWhenValidData
+2. shouldThrowExceptionWhenNameIsBlank
+3. shouldThrowExceptionWhenPriceIsZeroOrNegative
+4. shouldThrowExceptionWhenStockIsNegative
+5. shouldUpdateProductWhenValidData
+6. shouldThrowExceptionWhenUpdatingWithInvalidData
+7. shouldDecreaseStockWhenQuantityValid
+8. shouldThrowExceptionWhenDecreaseStockBelowZero
+9. shouldThrowExceptionWhenDecreaseStockWithZeroOrNegativeQuantity
+10. shouldIncreaseStockWhenQuantityValid
+11. shouldThrowExceptionWhenIncreaseStockWithZeroOrNegativeQuantity
+12. shouldTrimNameOnCreateAndUpdate
+13. shouldPreserveIdAndCreatedAtAfterUpdate
+
+Resultado: cobertura completa das regras de negócio do domínio Product.
+
+------------------------------------------------------------
 💥 EXCEÇÕES DE DOMÍNIO
 ------------------------------------------------------------
 DomainException (base) → raiz para todas as exceções do domínio
@@ -71,12 +96,10 @@ InvalidTotalSpentException → total gasto inválido
 ------------------------------------------------------------
 🎯 PRÓXIMOS PASSOS SUGERIDOS
 ------------------------------------------------------------
-1. Revisar exceções restantes no módulo entities para manter padrão de nomenclatura.
-2. Ajustar gateways e use cases para propagar apenas DomainException.
-3. Implementar ExceptionHandler global no módulo interface-adapters.
-4. Garantir consistência entre MySQL, Elasticsearch e eventos Kafka.
-5. Finalizar testes unitários de validação e exceções de domínio.
-6. Criar classe principal (Spring Boot starter) no módulo frameworks-drivers.
+1. Replicar abordagem TDD nas entidades Order, OrderItem e User.
+2. Integrar camada de persistência (MySQL) e indexação (Elasticsearch).
+3. Validar consistência de eventos Kafka após pagamento de pedidos.
+4. Garantir cobertura de testes mínima de 80% no módulo ecommerce-entities.
 
 ------------------------------------------------------------
 📄 DOCUMENTOS DE REFERÊNCIA
@@ -88,4 +111,4 @@ InvalidTotalSpentException → total gasto inválido
 📌 COMO CONTINUAR
 ------------------------------------------------------------
 Cole este prompt em um novo chat e diga:
-"Continuar a partir deste contexto de reestruturação da Clean Architecture com exceções de domínio."
+"Continuar a partir deste contexto de reestruturação da Clean Architecture com exceções de domínio e testes TDD do Product."
