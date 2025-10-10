@@ -9,22 +9,29 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>entities</module>
-        <module>usecases</module>
-        <module>interface-adapters</module>
-        <module>frameworks-drivers</module>
+        <module>ecommerce-entities</module>
+        <module>ecommerce-usecases</module>
+        <module>ecommerce-interface-adapters</module>
+        <module>ecommerce-frameworks-drivers</module>
     </modules>
 
     <properties>
         <java.version>25</java.version>
+        <spring.boot.version>3.5.6</spring.boot.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <version>3.5.6</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-        </project>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

@@ -1,0 +1,91 @@
+🧩 CONTINUAÇÃO DO PROJETO - CLEAN ARCHITECTURE (JAVA SPRING BOOT)
+
+Objetivo:
+Reestruturar o projeto ecommerce-demo-api seguindo a Clean Architecture (Uncle Bob),
+com foco em separação de camadas, modularização Maven, entidades ricas e exceções de domínio.
+
+------------------------------------------------------------
+🏗 ESTRUTURA DE MÓDULOS
+------------------------------------------------------------
+ecommerce-entities            → Enterprise Business Rules (Entities)
+ecommerce-usecases            → Application Business Rules (Use Cases)
+ecommerce-interface-adapters  → Interface Adapters (Controllers, Gateways)
+ecommerce-frameworks-drivers  → Frameworks & Drivers (DB, Kafka, Elasticsearch, Security)
+
+Fluxo de dependência:
+frameworks-drivers → interface-adapters → usecases → entities
+
+------------------------------------------------------------
+⚙️ STATUS ATUAL
+------------------------------------------------------------
+- Todos os pom.xml corrigidos e hierarquia Maven configurada.
+- Reestruturação feita de dentro para fora (entities → usecases → adapters → frameworks).
+- Entities Product, Order, User e relatórios refatoradas como entidades ricas.
+- Casos de uso ajustados para usar métodos de domínio, sem recriar entidades.
+- Exceções genéricas substituídas por exceções específicas de domínio.
+- Regras de validação e consistência encapsuladas dentro das entidades.
+- Padrão de exceções centralizado na classe base DomainException.
+
+------------------------------------------------------------
+🧱 ENTIDADES REESTRUTURADAS
+------------------------------------------------------------
+Product
+- Métodos: create(), update(), decreaseStock(), increaseStock()
+- Exceções: ValidationException, InsufficientStockException
+- Garantias: nome não vazio, preço > 0, estoque ≥ 0
+
+Order
+- Métodos: create(), pay(), cancel(), addItem()
+- Exceções: EmptyOrderException, InvalidOrderStateException, InvalidOrderTotalException
+- Regras: pedido sem itens é inválido, total não pode ser negativo, estado deve ser coerente
+
+OrderItem
+- Record imutável com validação interna
+- Exceções: InvalidQuantityException, InvalidPriceException
+- Regra: quantidade > 0, preço > 0
+
+User
+- Usa enum UserRole (ADMIN / USER)
+- Métodos de domínio: register(), isAdmin(), isUser()
+- Validação de formato de e-mail e papel do usuário
+
+Relatórios
+- UserAverageTicket → Exceção: InvalidAverageTicketException
+- UserPurchaseSummary → Exceção: InvalidTotalSpentException
+- Ambos definidos como records imutáveis e validados
+
+------------------------------------------------------------
+💥 EXCEÇÕES DE DOMÍNIO
+------------------------------------------------------------
+DomainException (base) → raiz para todas as exceções do domínio
+ValidationException / InvalidFieldException → validações genéricas
+InsufficientStockException → estoque insuficiente
+InvalidOrderStateException → transição de estado inválida
+EmptyOrderException → pedido sem itens
+InvalidOrderTotalException → total negativo ou nulo
+InvalidQuantityException → quantidade ≤ 0
+InvalidPriceException → preço ≤ 0
+InvalidAverageTicketException → ticket médio inválido
+InvalidTotalSpentException → total gasto inválido
+
+------------------------------------------------------------
+🎯 PRÓXIMOS PASSOS SUGERIDOS
+------------------------------------------------------------
+1. Revisar exceções restantes no módulo entities para manter padrão de nomenclatura.
+2. Ajustar gateways e use cases para propagar apenas DomainException.
+3. Implementar ExceptionHandler global no módulo interface-adapters.
+4. Garantir consistência entre MySQL, Elasticsearch e eventos Kafka.
+5. Finalizar testes unitários de validação e exceções de domínio.
+6. Criar classe principal (Spring Boot starter) no módulo frameworks-drivers.
+
+------------------------------------------------------------
+📄 DOCUMENTOS DE REFERÊNCIA
+------------------------------------------------------------
+- Caso técnico.pdf
+- Fluxo de interação.pdf
+
+------------------------------------------------------------
+📌 COMO CONTINUAR
+------------------------------------------------------------
+Cole este prompt em um novo chat e diga:
+"Continuar a partir deste contexto de reestruturação da Clean Architecture com exceções de domínio."

@@ -1,18 +1,18 @@
-package demo.ecommerce.entity;
+    package demo.ecommerce.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+    import lombok.AllArgsConstructor;
+    import lombok.EqualsAndHashCode;
+    import lombok.Getter;
+    import lombok.ToString;
 
-import java.math.BigDecimal;
+    import java.math.BigDecimal;
 
-@Getter
-@AllArgsConstructor
-@ToString
-@EqualsAndHashCode
-public class UserPurchaseSummary {
+    @Getter
+    @AllArgsConstructor
+    @ToString
+    @EqualsAndHashCode
+    public class UserPurchaseSummary {
 
-    private final String userId;
-    private final BigDecimal totalSpent;
-}
+        private final String userId;
+        private final BigDecimal totalSpent;
+    }

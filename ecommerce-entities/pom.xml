@@ -9,15 +9,15 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>demo</groupId>
-    <artifactId>entities</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>ecommerce-entities</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
+
 </project>
