@@ -97,8 +97,9 @@ Casos cobertos:
 8. shouldAddItemWhenOrderIsPending
 9. shouldThrowExceptionWhenAddingItemToNonPendingOrder
 10. shouldRecalculateTotalWhenItemsAdded
-11. shouldThrowExceptionWhenTotalAmountIsNegative
-12. shouldPreserveIdUserIdAndCreatedAt
+11. shouldThrowExceptionWhenItemPriceIsNegative
+12. shouldThrowExceptionWhenTotalAmountIsNegative
+13. shouldPreserveIdUserIdAndCreatedAt
 
 Resultado: cobertura completa das regras de negócio e transições de estado do domínio Order.
 

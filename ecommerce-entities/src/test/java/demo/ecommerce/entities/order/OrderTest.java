@@ -74,7 +74,7 @@ class OrderTest {
 
 
     @Test
-    void shouldThrowExceptionWhenTotalAmountIsNegativeUsingReflection() throws Exception {
+    void shouldThrowExceptionWhenTotalAmountIsNegative() throws Exception {
         UUID orderId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
         List<OrderItem> items = List.of();
