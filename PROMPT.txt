@@ -25,7 +25,7 @@ frameworks-drivers → interface-adapters → usecases → entities
 - Exceções genéricas substituídas por exceções específicas de domínio.
 - Regras de validação e consistência encapsuladas dentro das entidades.
 - Padrão de exceções centralizado na classe base DomainException.
-- Testes unitários dos domínios Product e Order implementados via TDD com JUnit 5.
+- Testes unitários dos domínios Product, Order e User implementados via TDD com JUnit 5.
 
 ------------------------------------------------------------
 🧱 ENTIDADES REESTRUTURADAS
@@ -104,6 +104,29 @@ Casos cobertos:
 Resultado: cobertura completa das regras de negócio e transições de estado do domínio Order.
 
 ------------------------------------------------------------
+🧪 TESTES DE DOMÍNIO — USER (TDD)
+------------------------------------------------------------
+Classe: UserTest
+Pacote: demo.ecommerce.entities.user
+
+Casos cobertos:
+1. shouldRegisterUserWithValidData
+2. shouldSetIdAndCreatedAtOnRegister
+3. shouldThrowExceptionWhenEmailHasInvalidFormat
+4. shouldThrowExceptionWhenNameIsNull
+5. shouldThrowExceptionWhenEmailIsNull
+6. shouldThrowExceptionWhenPasswordHashIsNull
+7. shouldThrowExceptionWhenRoleIsNull
+8. shouldReturnTrueForIsAdminWhenRoleAdmin
+9. shouldReturnTrueForIsUserWhenRoleUser
+10. shouldReturnFalseForIsAdminWhenRoleUser
+11. shouldReturnFalseForIsUserWhenRoleAdmin
+12. shouldGenerateDifferentIdsForDifferentRegistrations
+13. shouldBeImmutable
+
+Resultado: cobertura completa das regras de negócio e validações do domínio User.
+
+------------------------------------------------------------
 💥 EXCEÇÕES DE DOMÍNIO
 ------------------------------------------------------------
 DomainException (base) → raiz para todas as exceções do domínio
@@ -116,14 +139,6 @@ InvalidQuantityException → quantidade ≤ 0
 InvalidPriceException → preço ≤ 0
 InvalidAverageTicketException → ticket médio inválido
 InvalidTotalSpentException → total gasto inválido
-
-------------------------------------------------------------
-🎯 PRÓXIMOS PASSOS SUGERIDOS
-------------------------------------------------------------
-1. Replicar abordagem TDD nas entidades OrderItem e User.
-2. Integrar camada de persistência (MySQL) e indexação (Elasticsearch).
-3. Validar consistência de eventos Kafka após pagamento de pedidos.
-4. Garantir cobertura de testes mínima de 80% no módulo ecommerce-entities.
 
 ------------------------------------------------------------
 📄 DOCUMENTOS DE REFERÊNCIA
