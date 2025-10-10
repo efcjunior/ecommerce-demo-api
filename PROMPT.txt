@@ -126,6 +126,22 @@ Casos cobertos:
 
 Resultado: cobertura completa das regras de negócio e validações do domínio User.
 
+
+------------------------------------------------------------
+🧪 TESTES DE DOMÍNIO — USER AVERAGE TICKET (TDD)
+------------------------------------------------------------
+Classe: UserAverageTicketTest
+Pacote: demo.ecommerce.entities.user
+
+Casos cobertos:
+1. shouldCreateWhenAverageTicketIsPositive
+2. shouldCreateWhenAverageTicketIsZero
+3. shouldAcceptPositiveValuesWithDifferentScales
+4. shouldThrowExceptionWhenAverageTicketIsNull
+5. shouldThrowExceptionWhenAverageTicketIsNegative
+
+Resultado: validação completa das regras de negócio do record UserAverageTicket.
+
 ------------------------------------------------------------
 💥 EXCEÇÕES DE DOMÍNIO
 ------------------------------------------------------------
