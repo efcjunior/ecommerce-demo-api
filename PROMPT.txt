@@ -171,6 +171,94 @@ InvalidAverageTicketException → ticket médio inválido
 InvalidTotalSpentException → total gasto inválido
 
 ------------------------------------------------------------
+🧩 CAMADA USE CASE — ESTRUTURA E IMPLEMENTAÇÕES
+------------------------------------------------------------
+Pacote base: demo.ecommerce.usecases
+
+📦 Estrutura de pacotes:
+demo.ecommerce.usecases
+├── common
+│   ├── UseCase.java
+│   ├── VoidUseCase.java
+│   ├── Command.java / Query.java
+│   └── exceptions
+│       └── NotFoundException.java
+│
+├── ports
+│   ├── ProductRepository.java
+│   └── EventPublisher.java
+│
+└── product
+    ├── command
+    │   ├── createproduct
+    │   │   ├── CreateProductInput.java
+    │   │   ├── CreateProductOutput.java
+    │   │   └── CreateProductInteractor.java
+    │   │
+    │   ├── updateproduct
+    │   │   ├── UpdateProductInput.java
+    │   │   ├── UpdateProductOutput.java
+    │   │   └── UpdateProductInteractor.java
+    │   │
+    │   └── deleteproduct
+    │       ├── DeleteProductInput.java
+    │       ├── DeleteProductOutput.java
+    │       └── DeleteProductInteractor.java
+    │
+    └── query
+        ├── GetProductById (pendente)
+        └── SearchProducts (pendente)
+
+------------------------------------------------------------
+🧩 PRODUCT — USE CASES IMPLEMENTADOS
+------------------------------------------------------------
+CreateProductInteractor
+- Responsabilidade: criar novo produto utilizando Product.create()
+- Persistência via ProductRepository.save()
+- Retorna CreateProductOutput(productId, createdAt)
+- Validação delegada ao domínio
+- Lança exceções de domínio em caso de dados inválidos
+
+Testes: CreateProductInteractorTest
+1. shouldCreateProductWhenInputIsValid
+2. shouldThrowExceptionWhenNameIsBlank
+
+------------------------------------------------------------
+UpdateProductInteractor
+- Responsabilidade: atualizar produto existente
+- Busca produto via repository.findById()
+- Atualiza dados usando Product.update()
+- Persiste novamente via repository.save()
+- Retorna UpdateProductOutput(productId, updatedAt)
+- Lança NotFoundException se o produto não for encontrado
+
+Testes: UpdateProductInteractorTest
+1. shouldUpdateProductWhenInputIsValid
+2. shouldThrowNotFoundExceptionWhenProductDoesNotExist
+
+------------------------------------------------------------
+DeleteProductInteractor
+- Responsabilidade: deletar produto existente
+- Verifica existência via repository.findById()
+- Executa repository.delete(id)
+- Retorna DeleteProductOutput(success = true)
+- Lança NotFoundException se produto não existir
+
+Testes: DeleteProductInteractorTest
+1. shouldDeleteProductWhenItExists
+2. shouldThrowNotFoundExceptionWhenProductDoesNotExist
+
+------------------------------------------------------------
+📈 PRÓXIMAS IMPLEMENTAÇÕES
+------------------------------------------------------------
+- GetProductByIdInteractor (Query)
+  → Busca produto por ID e retorna dados detalhados.
+- SearchProductsInteractor (Query)
+  → Busca paginada e filtrada com suporte a nome, categoria e faixa de preço.
+- Integração dos casos de uso com ProductRepositoryGateway (MySQL) e ProductSearchGateway (Elasticsearch).
+- Testes de unidade para ambos os casos de leitura.
+
+------------------------------------------------------------
 📄 DOCUMENTOS DE REFERÊNCIA
 ------------------------------------------------------------
 - Caso técnico.pdf
@@ -181,45 +269,3 @@ InvalidTotalSpentException → total gasto inválido
 ------------------------------------------------------------
 Cole este prompt em um novo chat e diga:
 "Continuar a partir deste contexto de reestruturação da Clean Architecture com exceções de domínio e testes TDD dos domínios Product e Order."
-
-
-
-
-ecommerce-usecases
-└── src/main/java/demo/ecommerce/usecases
-    ├── common
-    │   ├── UseCase.java                 // interface genérica UseCase<I,O>
-    │   ├── Command.java / Query.java    // marcadores opcionais p/ CQRS
-    │   ├── VoidUseCase.java             // útil para casos sem retorno
-    │   └── exceptions
-    │       └── NotFoundException.java   // exceção de aplicação (não-domínio)
-    ├── ports
-    │   ├── ProductRepository.java       // portas (interfaces) de saída
-    │   ├── ClockProvider.java
-    │   ├── IdGenerator.java
-    │   └── EventPublisher.java          // opcional (domínio→aplicação)
-    └── product
-        ├── command
-        │   ├── CreateProduct
-        │   │   ├── CreateProductInput.java
-        │   │   ├── CreateProductOutput.java
-        │   │   └── CreateProductInteractor.java
-        │   ├── UpdateProduct
-        │   │   ├── UpdateProductInput.java
-        │   │   ├── UpdateProductOutput.java
-        │   │   └── UpdateProductInteractor.java
-        │   ├── DeleteProduct
-        │   │   ├── DeleteProductInput.java
-        │   │   └── DeleteProductInteractor.java
-        │   └── AdjustProductStock
-        │       ├── AdjustProductStockInput.java   // {productId, delta}
-        │       └── AdjustProductStockInteractor.java
-        └── query
-            ├── GetProductById
-            │   ├── GetProductByIdInput.java
-            │   ├── GetProductByIdOutput.java
-            │   └── GetProductByIdInteractor.java
-            └── SearchProducts
-                ├── SearchProductsInput.java
-                ├── SearchProductsOutput.java
-                └── SearchProductsInteractor.java
